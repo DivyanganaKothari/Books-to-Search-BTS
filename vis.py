@@ -2,10 +2,12 @@ import csv
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.subplots as sp
+import plotly.graph_objs as go
 import plotly.offline as offline
 import json
-import datetime
-from datetime import datetime
+
+
 import plotly.subplots as sp
 import os
 
@@ -15,12 +17,7 @@ with open("output.json", "r") as f:
     output = json.load(f)
    # print(output)
     table1 = pd.DataFrame.from_dict(output, orient='index')
-    print(table1)
-
-
-
-#data= pd.read_csv("output.csv")
-#print(data)
+    print(table1) #score title and index
 
 merged_list=[]
 
@@ -57,26 +54,17 @@ table2 = pd.DataFrame(output)
 result = table2.loc[table2['index'].isin(table1.index), ['title', 'rating']]
 print(result) #get title with same index no. from the merged list
 
-fig = go.Figure(data=[go.Table(
-    header=dict(values=list(result.columns),
-                fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=[result[col] for col in result.columns],
-               fill_color='lavender',
-               align='left'))
-])
+# Create a subplots figure
+fig = sp.make_subplots(rows=1, cols=2, specs=[[{'type': 'bar'}, {'type': 'pie'}]])
+
+# Add the first chart (bar chart)
+fig.add_trace(go.Bar(x=table1['title'], y=table1['score'], name='Score distribution of Books',marker=dict(color='rgb(158,202,225)', line=dict(color='rgb(8,48,107)',width=1.5))), row=1, col=1)
+
+# Add the second chart (pie chart)
+fig.add_trace(go.Pie(labels=result['title'], values=result['rating'], name='Book title-Rating distribution'), row=1, col=2)
+
+# Update the layout
+fig.update_layout(title='Books Distribution', showlegend=True)
+fig.update_xaxes(title_text="Book Title", row=1, col=1)
+fig.update_yaxes(title_text="Score", row=1, col=1)
 fig.show()
-
-# Create a bar chart trace
-trace = go.Bar(x=table1['title'], y=table1['score'],
-              marker=dict(color='rgba(0,0,255,0.5)', line=dict(color='rgb(0,0,0)', width=1.5)))
-
-# Create a Figure object
-fig = go.Figure(data=[trace])
-
-# Set the layout
-fig.update_layout(title='Score by Title', xaxis=dict(title='Title'), yaxis=dict(title='Score'))
-
-# Show the figure
-fig.show()
-
