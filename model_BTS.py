@@ -61,31 +61,6 @@ def read_item(query: str):
         with open("output.json", "w") as f:
             json.dump(output, f)
     return {"query": query, "output": output}
-    #subprocess.run("python","vis.py",output)
-
-
-'''  # Get current date and time
-    now = datetime.datetime.now()
-
-    # Create a filename using current date and time
-    filename = f"output_{now.day}_{now.hour}.csv"
-
-    # Open a file in write mode
-    with open(filename, 'w', newline='') as csvfile:
-        # Create a CSV writer
-        csvwriter = csv.writer(csvfile)
-
-        # Write the header row
-        csvwriter.writerow(['Index', 'Title', 'Score'])
-
-        # Iterate over the output and write each row
-        for index, item in output.items():
-            csvwriter.writerow([index, item['title'], item['score']])
-            '''
-
-
-#df = pd.DataFrame(output)
-#df.to_csv('output.csv', index=False, header=True)
 
 
 if __name__ == "__main__":

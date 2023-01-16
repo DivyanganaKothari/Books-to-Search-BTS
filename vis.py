@@ -79,3 +79,4 @@ fig.update_layout(title='Score by Title', xaxis=dict(title='Title'), yaxis=dict(
 
 # Show the figure
 fig.show()
+
