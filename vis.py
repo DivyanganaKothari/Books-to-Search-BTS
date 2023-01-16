@@ -13,7 +13,7 @@ import json
 
 with open("output.json", "r") as f:
     output = json.load(f)
-    print(output)
+   # print(output)
     table1 = pd.DataFrame.from_dict(output, orient='index')
     print(table1)
 
@@ -36,7 +36,7 @@ with open('Data.xlsx - Merged Dataset_1.csv','r') as i:
        merged_list.append(index)
        merged_list.append(title)
        merged_list.append(rating)
-print(merged_list)        #merged list contaning title index and rating
+#print(merged_list)        #merged list contaning title index and rating
 
 #creating dictionary
 output = []
@@ -46,13 +46,13 @@ for i in range(0, len(merged_list), 3):
         "title": merged_list[i + 1],
         "rating": merged_list[i + 2]
      })
-print(output)
+#print(output)
 
 # Convert the list of dictionaries to a DataFrame
 table2 = pd.DataFrame(output)
 
 # Print the resulting table
-print(table2)  #all data in form of table-index title and rating from all data set
+#print(table2)  #all data in form of table-index title and rating from all data set
 
 result = table2.loc[table2['index'].isin(table1.index), ['title', 'rating']]
 print(result) #get title with same index no. from the merged list
