@@ -2,14 +2,23 @@ import warnings
 warnings.filterwarnings("ignore")
 import uvicorn
 from fastapi import FastAPI
+import subprocess
+import json
+import csv
+import datetime
+import pandas as pd
+import subprocess
+
 from sentence_transformers.util import semantic_search
 import pandas as pd
 from sentence_transformers import SentenceTransformer
+import matplotlib.pyplot as plt
 
 model = SentenceTransformer('bert-base-cased')
 
 df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
+#filename= "test.csv"
 
 
 
@@ -49,10 +58,38 @@ def read_item(query: str):
         title = df['title'][id]
         output[id] = {"score": score, "title": title}
         ('corpus_id:', id, "\t","score:", i['score'], "\t", df['title'][id])
+        with open("output.json", "w") as f:
+            json.dump(output, f)
     return {"query": query, "output": output}
+    #subprocess.run("python","vis.py",output)
+
+
+'''  # Get current date and time
+    now = datetime.datetime.now()
+
+    # Create a filename using current date and time
+    filename = f"output_{now.day}_{now.hour}.csv"
+
+    # Open a file in write mode
+    with open(filename, 'w', newline='') as csvfile:
+        # Create a CSV writer
+        csvwriter = csv.writer(csvfile)
+
+        # Write the header row
+        csvwriter.writerow(['Index', 'Title', 'Score'])
+
+        # Iterate over the output and write each row
+        for index, item in output.items():
+            csvwriter.writerow([index, item['title'], item['score']])
+            '''
+
+
+#df = pd.DataFrame(output)
+#df.to_csv('output.csv', index=False, header=True)
+
 
 if __name__ == "__main__":
-    
+
     uvicorn.run(app)
 
 
