@@ -2,12 +2,8 @@ import warnings
 warnings.filterwarnings("ignore")
 import uvicorn
 from fastapi import FastAPI
-import subprocess
 import json
-import csv
-import datetime
-import pandas as pd
-import subprocess
+
 
 from sentence_transformers.util import semantic_search
 import pandas as pd
@@ -66,6 +62,7 @@ def read_item(query: str):
 if __name__ == "__main__":
 
     uvicorn.run(app)
+
 
 
     
