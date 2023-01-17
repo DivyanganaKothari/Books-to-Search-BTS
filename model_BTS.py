@@ -3,6 +3,8 @@ warnings.filterwarnings("ignore")
 import uvicorn
 from fastapi import FastAPI
 import json
+from flask import Flask, jsonify,request, render_template
+import subprocess
 
 
 from sentence_transformers.util import semantic_search
@@ -16,7 +18,7 @@ df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
 #filename= "test.csv"
 
-
+app= Flask(__name__)
 
 # query = input('Enter your query: ')
 # query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
@@ -32,15 +34,16 @@ df2 = pd.read_pickle('Embeddings.pkl')
     
 
 # use fastapi to create a web app
-app = FastAPI()
+#app = FastAPI()
 
-@app.get("/")
+
+@app.route("/")
 def read_root():
     return {"Heartly Welcome to BTS": "This is a web app for semantic search"}
 
 # input query
-@app.get("/query/{query}")
-def read_item(query: str):
+@app.route('/query/<query>', methods=['GET'])
+def read_item(query):
     query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
     top_k = 10
     results = semantic_search(query_embedding, df2['Embeddings'].to_list(), top_k=top_k)
@@ -56,12 +59,14 @@ def read_item(query: str):
         ('corpus_id:', id, "\t","score:", i['score'], "\t", df['title'][id])
         with open("output.json", "w") as f:
             json.dump(output, f)
-    return {"query": query, "output": output}
+    subprocess.run(["python", "vis.py"])  # call vis.py
+    return jsonify({"query": query, "output": output})
+   # return {"query": query, "output": output}
 
 
 if __name__ == "__main__":
 
-    uvicorn.run(app)
+    app.run(debug=True)
 
 
 
