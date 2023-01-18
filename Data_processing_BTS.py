@@ -22,13 +22,13 @@ from nltk import word_tokenize,sent_tokenize
 mydb = sql.connect(
   host="localhost",
   user="root",
-  password="Manoj@268")
+  password="Hello@268")
 
 query = "Select * from books.books_merged;" #books_merged is the table name
 
 df = pd.read_sql(query,mydb)
 print('Data is loaded')
-
+print(df.shape)
 # insert index column  
 df.insert(0, 'Index', range(0, 0 + len(df)))
 
@@ -48,6 +48,7 @@ df['Final']= df['title'] + df['author']
 
 # save the dataframe to a csv file
 df.to_csv('Data.xlsx - Merged Dataset_1.csv', index=False)
+
 
 # insert bert embeddings 
 from sentence_transformers import SentenceTransformer
@@ -70,5 +71,3 @@ df2['Index'] = df['Index'].tolist()
 df2.to_pickle('Embeddings.pkl')
 print('-'*50 )
 print('Data processing is done')
-
-
