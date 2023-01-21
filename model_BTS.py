@@ -84,6 +84,8 @@ import pandas as pd
 import plotly.graph_objs as go
 import plotly.subplots as sp
 from pathlib import Path
+import plotly.express as px
+colors = px.colors.sequential.Plasma
 
 from sentence_transformers.util import semantic_search
 import pandas as pd
@@ -127,7 +129,7 @@ def read_item():
     query = request.args.get('q')
     query_embedding = model.encode(query, convert_to_tensor=True, device='cpu')
     top_k = 10
-    results = semantic_search(query_embedding, df2['Embeddings'].to_list(), top_k=top_k)
+    results = semantic_search(query_embedding, df2['Embeddings_title'].to_list(), top_k=top_k)
     output = {}
 
     print("Query:", query)
@@ -184,20 +186,32 @@ def read_item():
     # print(result) #get title with same index no. from the merged list
 
     # Create a subplots figure
-    fig = sp.make_subplots(rows=1, cols=2, specs=[[{'type': 'bar'}, {'type': 'pie'}]])
-
+    #fig = sp.make_subplots(rows=2, cols=1)
+    fig=go.Figure()
     # Add the first chart (bar chart)
-    fig.add_trace(go.Bar(x=table1['title'], y=table1['score'], name='Score distribution of Books',
-                         marker=dict(color='rgb(158,202,225)', line=dict(color='rgb(8,48,107)', width=1.5))), row=1,
-                  col=1)
+    fig.add_trace(go.Bar(x=table1['score'], y=table1['title'], name='Score distribution of Books',
+                         marker=dict(color=colors[:len(table1)], line=dict(color='rgb(8,48,107)', width=1.5)), orientation='h'))
     # Add the second chart (pie chart)
 
-    fig.add_trace(go.Pie(labels=result['title'], values=result['rating'], name='Book title-Rating distribution'), row=1,
-                  col=2)
+    fig.add_trace(go.Pie(labels=result['title'], values=result['rating'], name='Book title-Rating distribution',marker=dict(colors=colors[:len(result)]),visible=False))
+
+    # Create a dropdown menu to toggle the visibility of the traces
+    fig.update_layout(updatemenus=[dict(type='buttons',
+                                        x=1,
+                                        y=0,
+                                        showactive=False,
+                                        buttons=[dict(label='Bar Chart',
+                                                      method='update',
+                                                      args=[{'visible': [True, False]},
+                                                            {'title': 'Recommended Books - "Bar Chart"'}]),
+                                                 dict(label='Pie Chart',
+                                                      method='update',
+                                                      args=[{'visible': [False, True]},
+                                                            {'title': 'Recommended Books - "Pie Chart"'}])])])
     # Update the layout
-    fig.update_layout(title='Recommended Books - "' + query + '"', showlegend=True)
-    fig.update_xaxes(title_text="Book Title", row=1, col=1)
-    fig.update_yaxes(title_text="Score", row=1, col=1)
+    fig.update_layout(title='Recommended Books')
+  #  fig.update_xaxes(title_text="Book Title", row=1, col=1)
+   # fig.update_yaxes(title_text="Score", row=1, col=1)
 
     txt = Path('header.html').read_text()
 
