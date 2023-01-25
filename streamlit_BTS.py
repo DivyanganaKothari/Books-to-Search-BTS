@@ -5,12 +5,9 @@ warnings.filterwarnings("ignore")
 from sentence_transformers.util import semantic_search
 import pandas as pd
 from sentence_transformers import SentenceTransformer
-import matplotlib.pyplot as plt
+
 import plotly.express as px
-import numpy as np
-import json
-import csv
-import plost
+
 
 
 model = SentenceTransformer('bert-base-cased')
@@ -24,7 +21,7 @@ with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 st.title("BTS-Book Recommendation System")
-# Row A
+# Row A for for adding 3 description boxes
 st.markdown('### Semantic Search')
 col1, col2, col3 = st.columns(3)
 col1.metric("Books", "1470")
@@ -34,6 +31,7 @@ col3.metric("Accuracy","64%")
 #dataset
 data=pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 
+#user enters query
 query = st.text_input("Enter your query")
 if st.button("Search"):
     query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
@@ -52,7 +50,7 @@ if st.button("Search"):
     st.write(df_output)
 
     #st.write(table1)  # score title and index
-#2 columns
+#2 columns for bar n pie chart
     c1, c2 = st.columns((6,4))
 
     with c1:
