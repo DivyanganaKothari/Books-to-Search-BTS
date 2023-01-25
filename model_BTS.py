@@ -1,82 +1,9 @@
-'''import warnings
+import warnings
 warnings.filterwarnings("ignore")
 import uvicorn
 from fastapi import FastAPI
 import json
 from flask import Flask, jsonify,request, render_template
-import subprocess
-
-
-from sentence_transformers.util import semantic_search
-import pandas as pd
-from sentence_transformers import SentenceTransformer
-import matplotlib.pyplot as plt
-
-model = SentenceTransformer('bert-base-cased')
-
-df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
-df2 = pd.read_pickle('Embeddings.pkl')
-#filename= "test.csv"
-
-app= Flask(__name__)
-
-# query = input('Enter your query: ')
-# query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
-
-# top_k = 10
-# results = semantic_search(query_embedding, df2['Embeddings'].to_list(), top_k=top_k)
-
-# print("Query:", query)
-# print("Top 10 most similar sentences in corpus:")
-# for i in results[0]:
-#     id = i['corpus_id']
-#     print('corpus_id:', id, "\t","score:", i['score'], "\t", df['title'][id])
-    
-
-# use fastapi to create a web app
-#app = FastAPI()
-
-
-@app.route("/")
-def read_root():
-    return {"Heartly Welcome to BTS": "This is a web app for semantic search"}
-
-# input query
-@app.route('/query/<query>', methods=['GET'])
-def read_item(query):
-    query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
-    top_k = 10
-    results = semantic_search(query_embedding, df2['Embeddings'].to_list(), top_k=top_k)
-    output ={}        
-    
-    print("Query:", query)
-    print("Top 10 most similar sentences in corpus:")
-    for i in results[0]:
-        id = i['corpus_id']
-        score = i['score']
-        title = df['title'][id]
-        output[id] = {"score": score, "title": title}
-        ('corpus_id:', id, "\t","score:", i['score'], "\t", df['title'][id])
-        with open("output.json", "w") as f:
-            json.dump(output, f)
-    subprocess.run(["python", "vis.py"])  # call vis.py
-    return jsonify({"query": query, "output": output})
-   # return {"query": query, "output": output}
-
-
-if __name__ == "__main__":
-
-    app.run(debug=True)
-
-
-'''
-import warnings
-
-warnings.filterwarnings("ignore")
-import uvicorn
-from fastapi import FastAPI
-import json
-from flask import Flask, jsonify, request, render_template
 import subprocess
 import json
 import csv
@@ -96,94 +23,107 @@ model = SentenceTransformer('bert-base-cased')
 
 df = pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
-# filename= "test.csv"
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='views')
 
+# function to save the query 
+def create_table(query):
+    filename = "query.csv"
+    if Path(filename).is_file():
+        df = pd.read_csv(filename)
+        if query in df['query'].values:
+            df.loc[df['query'] == query, 'count'] += 1
+        else:
+            df = df.append({'query': query, 'count': 1}, ignore_index=True)
+        df.to_csv(filename, index=False)
+    else:
+        df = pd.DataFrame({'query': [query], 'count': [1]})
+        df.to_csv(filename, index=False)
+    return df
+    
+# Welcome Page
+@app.route('/')
+def home_page():
+    return render_template('index.html', page="Home")
+    
+# Books Page
+@app.route('/books')
+def books_page():
+    return render_template('books.html', page="Books")
+    
+# Authors Page
+@app.route('/authors')
+def authors_page():
+    return render_template('authors.html', page="Authors")
+    
+# Comtacts Page
+@app.route('/contact')
+def contacts_page():
+    return render_template('contact.html', page="Contact")
+    
+# Help Page
+@app.route('/help')
+def help_page():
+    return render_template('help.html', page="Help")
 
-# query = input('Enter your query: ')
-# query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
-
-# top_k = 10
-# results = semantic_search(query_embedding, df2['Embeddings'].to_list(), top_k=top_k)
-
-# print("Query:", query)
-# print("Top 10 most similar sentences in corpus:")
-# for i in results[0]:
-#     id = i['corpus_id']
-#     print('corpus_id:', id, "\t","score:", i['score'], "\t", df['title'][id])
-
-
-# use fastapi to create a web app
-# app = FastAPI()
-
-
-@app.route("/")
-def read_root():
-    return {"Heartly Welcome to BTS": "This is a web app for semantic search"}
-
-
-# input query
-@app.route('/query', methods=['GET'])
-def read_item():
-    query = request.args.get('q')
-    query_embedding = model.encode(query, convert_to_tensor=True, device='cpu')
+# Search Page where data visualisation is shown
+@app.route('/search', methods=['GET'])
+def search_page():
+    query = request.args.get('q') # Get Search Query
+    if not query: # abort if no search query is given
+        return home_page()
+    
+    create_table(query) # save statistics about recent querys
+    query_embedding = model.encode(query, convert_to_tensor=True,device='cpu') #define model query
     top_k = 10
-    results = semantic_search(query_embedding, df2['Embeddings_title'].to_list(), top_k=top_k)
-    output = {}
-
-    print("Query:", query)
+    results = semantic_search(query_embedding, df2['Embeddings_title'].to_list(), top_k=top_k) #search best results
+    output ={}
+    
+    print("Query:", query) #print best results
     print("Top 10 most similar sentences in corpus:")
     for i in results[0]:
         id = i['corpus_id']
         score = i['score']
         title = df['title'][id]
-        output[id] = {"score": score, "title": title}
-        ('corpus_id:', id, "\t", "score:", i['score'], "\t", df['title'][id])
-        with open("output.json", "w") as f:
-            json.dump(output, f)
-    # subprocess.run(["python", "vis.py"])  # call vis.py
+        output[str(id)] = {"score": score, "title": title}
+        
+    table1 = pd.DataFrame.from_dict(output, orient='index')
+    print(table1) #score title and index
 
-    with open("output.json", "r") as f:
-        output = json.load(f)
-        # print(output)
-        table1 = pd.DataFrame.from_dict(output, orient='index')
-        print(table1)  # score title and index
+    merged_list=[]
 
-    merged_list = []
+    with open('Data.xlsx - Merged Dataset_1.csv','r') as i:
+       reader=csv.reader(i)
+       next(reader)
+       for row in reader:
+           index=row[0]
+           title=row[1]
+           rating=row[3]
+           #print(f"title:{title}")
+           #print(f"rating:{rating}")
+           merged_list.append(index)
+           merged_list.append(title)
+           merged_list.append(rating)
+    #print(merged_list)        #merged list contaning title index and rating
 
-    with open('Data.xlsx - Merged Dataset_1.csv', 'r') as i:
-        reader = csv.reader(i)
-        next(reader)
-        for row in reader:
-            index = row[0]
-            title = row[1]
-            rating = row[3]
-            # print(f"title:{title}")
-            # print(f"rating:{rating}")
-            merged_list.append(index)
-            merged_list.append(title)
-            merged_list.append(rating)
-    # print(merged_list)        #merged list contaning title index and rating
-
-    # creating dictionary
+    #creating dictionary
     output = []
     for i in range(0, len(merged_list), 3):
-        output.append({
+            output.append({
             "index": merged_list[i],
             "title": merged_list[i + 1],
             "rating": merged_list[i + 2]
-        })
-    # print(output)
+         })
+    #print(output)
 
     # Convert the list of dictionaries to a DataFrame
     table2 = pd.DataFrame(output)
 
     # Print the resulting table
-    # print(table2)  #all data in form of table-index title and rating from all data set
+    #print(table2)  #all data in form of table-index title and rating from all data set
 
     result = table2.loc[table2['index'].isin(table1.index), ['title', 'rating']]
-    # print(result) #get title with same index no. from the merged list
+    #print(result) #get title with same index no. from the merged list
 
     # Create a subplots figure
     #fig = sp.make_subplots(rows=2, cols=1)
@@ -210,24 +150,12 @@ def read_item():
                                                             {'title': 'Recommended Books - "Pie Chart"'}])])])
     # Update the layout
     fig.update_layout(title='Recommended Books')
-  #  fig.update_xaxes(title_text="Book Title", row=1, col=1)
-   # fig.update_yaxes(title_text="Score", row=1, col=1)
+   # fig.update_xaxes(title_text="Book Title", row=1, col=1)
+   # fig.update_yaxes(title_text="Score", row=1, col=1)    
 
-    txt = Path('header.html').read_text()
-
-    return txt + fig.to_html(full_html=False, include_plotlyjs='cdn') + "</div></body></html>"
-
-
-# return {"query": query, "output": output}
-
+    # Render template search.html with variables page (Name), fig (Data visualisation) and query (Search String) set by python
+    return render_template('search.html', page="Search", fig=fig.to_html(full_html=False, include_plotlyjs='cdn'), query=query)
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
-
-    
 
