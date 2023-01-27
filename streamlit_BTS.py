@@ -86,16 +86,15 @@ if st.button("Search"):  # Get Search Query
     fig = px.bar(df_output, x='title', y='score')
     fig.update_layout(xaxis={'categoryorder': 'total descending'}, yaxis={'title': 'score'},
                       xaxis_tickangle=-45, yaxis_title='title')
-    fig.data[0].marker.color = ['red', 'blue', 'green', 'purple', 'yellow', 'violet', 'indigo', 'orange', 'navy',
-                                'brown']
+    fig.data[0].marker.color = ['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon',
+                                'rosybrown']
     st.plotly_chart(fig)
 
 
     st.markdown('### Pie Chart showing top 10 books according to User Rating')
     fig2 = px.pie(df_output, values='rating', names='title',
-                  color_discrete_sequence=['red', 'blue', 'green', 'purple', 'yellow', 'violet', 'indigo', 'orange',
-                                           'navy',
-                                           'brown'])
+                  color_discrete_sequence=['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon',
+                                'rosybrown'])
     st.plotly_chart(fig2)
 
 
