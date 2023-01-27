@@ -5,8 +5,9 @@ warnings.filterwarnings("ignore")
 from sentence_transformers.util import semantic_search
 import pandas as pd
 from sentence_transformers import SentenceTransformer
-
+from pathlib import Path
 import plotly.express as px
+import plotly.graph_objs as go
 
 
 
@@ -21,19 +22,43 @@ with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 st.title("BTS-Book Recommendation System")
-# Row A for for adding 3 description boxes
-st.markdown('### Semantic Search')
-col1, col2, col3 = st.columns(3)
-col1.metric("Books", "1470")
-col2.metric("Source", "Kaggel")
-col3.metric("Accuracy","64%")
+
+df3= pd.read_csv('query.csv')
+# Sort the dataframe by the 'count' column in descending order
+df3= df3.sort_values(by='count', ascending=False)
+# Get the top 10 rows
+top_10 = df3.head(10)
+# Create a line chart
+fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
+
+# Set the chart title and axis labels
+fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Rating')
+
+# Display the chart
+st.plotly_chart(fig)
 
 #dataset
 data=pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 
+def create_table(query):
+    filename = "query.csv"
+    if Path(filename).is_file():
+        df = pd.read_csv(filename)
+        df['query'] = df['query'].str.lower()
+        if query in df['query'].values:
+            df.loc[df['query'] == query, 'count'] += 1
+        else:
+            df = df.append({'query': query, 'count': 1}, ignore_index=True)
+        df.to_csv(filename, index=False)
+    else:
+        df = pd.DataFrame({'query': [query], 'count': [1]})
+        df.to_csv(filename, index=False)
+    return df
+
 #user enters query
 query = st.text_input("Enter your query")
-if st.button("Search"):
+if st.button("Search"):  # Get Search Query
+    create_table(query.lower())  # save statistics about recent querys
     query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
     top_k = 10
     results = semantic_search(query_embedding, df2['Embeddings_title'].to_list(), top_k=top_k)
@@ -46,29 +71,36 @@ if st.button("Search"):
         rating= df['rating'][id]
         output[id] = {"score": score, "title": title, "rating": rating}
 
+
     df_output = pd.DataFrame.from_dict(output, orient='index')
     st.write(df_output)
+    '''
+    @st.cache
+    def load_link():
+        return df_output
+    df_output= load_link()
+    '''
 
-    #st.write(table1)  # score title and index
-#2 columns for bar n pie chart
-    c1, c2 = st.columns((6,4))
-
-    with c1:
-        st.markdown('### Bar Chart')
-        fig = px.bar(df_output, x='title', y='score')
-        fig.update_layout(xaxis={'categoryorder': 'total descending'}, yaxis={'title': 'score'},
+    #vis
+    st.markdown('### Bar Chart showing top 10 Books according to the similarity score')
+    fig = px.bar(df_output, x='title', y='score')
+    fig.update_layout(xaxis={'categoryorder': 'total descending'}, yaxis={'title': 'score'},
                       xaxis_tickangle=-45, yaxis_title='title')
-        fig.data[0].marker.color = ['red', 'blue', 'green', 'purple', 'yellow', 'violet', 'indigo', 'orange', 'navy',
+    fig.data[0].marker.color = ['red', 'blue', 'green', 'purple', 'yellow', 'violet', 'indigo', 'orange', 'navy',
                                 'brown']
-        st.plotly_chart(fig)
+    st.plotly_chart(fig)
 
-    with c2:
-        st.markdown('### Pie Chart')
-        fig2 = px.pie(df_output, values='rating', names='title',
+
+    st.markdown('### Pie Chart showing top 10 books according to User Rating')
+    fig2 = px.pie(df_output, values='rating', names='title',
                   color_discrete_sequence=['red', 'blue', 'green', 'purple', 'yellow', 'violet', 'indigo', 'orange',
                                            'navy',
                                            'brown'])
-        st.plotly_chart(fig2)
+    st.plotly_chart(fig2)
+
+
+
+
 
 
 
