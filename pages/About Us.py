@@ -29,11 +29,11 @@ else:
     graph2.edge('Backend','Data Cleaning','Model')
     graph2.edge('Data Cleaning','Pre-Trained Model(BERT)')
     graph2.edge('Pre-Trained Model(BERT)','Embeddings')
-    graph2.edge('Embeddings','Semantic Search')
+    graph2.edge('Embeddings','Semantic Search','Similarity Score')
     graph2.edge('Semantic Search','Recommendations','Top 10')
     graph2.edge('User','Input')
     graph2.edge('Input','Embeddings')
-    graph2.edge('Embeddings','Semantic Search','Similarity Score')
+    graph2.edge('Embeddings','Semantic Search')
     graph2.edge('Recommendations', 'Visualization')
     graph2.edge('Visualization', 'Input')
 
