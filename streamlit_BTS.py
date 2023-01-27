@@ -11,7 +11,6 @@ import plotly.graph_objs as go
 
 
 
-model = SentenceTransformer('bert-base-cased')
 
 df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
@@ -25,7 +24,7 @@ st.title("BTS-Book Recommendation System")
 
 df3= pd.read_csv('query.csv')
 # Sort the dataframe by the 'count' column in descending order
-df3= df3.sort_values(by='count', ascending=False)
+df3= df3.sort_values(by='count', ascending=True)
 # Get the top 10 rows
 top_10 = df3.head(10)
 # Create a line chart
@@ -56,30 +55,31 @@ def create_table(query):
     return df
 
 #user enters query
+
 query = st.text_input("Enter your query")
+
 if st.button("Search"):  # Get Search Query
     create_table(query.lower())  # save statistics about recent querys
+    model = SentenceTransformer('bert-base-cased')
     query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
     top_k = 10
     results = semantic_search(query_embedding, df2['Embeddings_title'].to_list(), top_k=top_k)
-    output ={}        
+    output={}
+    df_output_link={}
     
     for i in results[0]:
         id = i['corpus_id']
         score = i['score']
         title = df['title'][id]
         rating= df['rating'][id]
+        link=df['complete_link'][id]
         output[id] = {"score": score, "title": title, "rating": rating}
+        df_output_link[id]= {"title": title, "link": link}
 
 
     df_output = pd.DataFrame.from_dict(output, orient='index')
     st.write(df_output)
-    '''
-    @st.cache
-    def load_link():
-        return df_output
-    df_output= load_link()
-    '''
+    st.cache.df_output_link=df_output_link
 
     #vis
     st.markdown('### Bar Chart showing top 10 Books according to the similarity score')

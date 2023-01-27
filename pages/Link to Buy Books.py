@@ -1,20 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-#from streamlit_BTS import load_link
+import streamlit_BTS
 st.write("Link to buy book")
-st.header("Link to Buy Book")
-'''
-df_output=load_link()
-st.write(df_output)
-'''
+st.header("Link to Buy top 10 recommended Books")
 
-df=pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
-# select only title and link columns
-data = df[['title', 'complete_link']]
+df = st.cache.df_output_link
 
     # Create interactive table using plotly
-table = pd.DataFrame(data)
-
-    # write the table
+table = pd.DataFrame(df).from_dict(df, orient='index')
 st.write(table)
