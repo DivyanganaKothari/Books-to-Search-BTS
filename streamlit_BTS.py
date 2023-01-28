@@ -9,18 +9,16 @@ from pathlib import Path
 import plotly.express as px
 import plotly.graph_objs as go
 
+# Style
+st.set_page_config(layout='wide', initial_sidebar_state='expanded')
+with open('style.css') as css:
+    st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
-
+# Title
+st.title("BTS-Book Recommendation System")
 
 df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
-
-st.set_page_config(layout='wide', initial_sidebar_state='expanded')
-
-with open('style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-st.title("BTS-Book Recommendation System")
 
 df3= pd.read_csv('query.csv')
 # Sort the dataframe by the 'count' column in descending order
@@ -32,9 +30,12 @@ fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
 
 # Set the chart title and axis labels
 fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Rating')
+fig.update_traces(marker=dict(color='#9B870C'))
 
 # Display the chart
 st.plotly_chart(fig)
+
+
 
 #dataset
 data=pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
@@ -96,6 +97,9 @@ if st.button("Search"):  # Get Search Query
                   color_discrete_sequence=['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon',
                                 'rosybrown'])
     st.plotly_chart(fig2)
+
+
+
 
 
 

@@ -1,14 +1,17 @@
 import streamlit as st
 import graphviz
-st.write("about us")
+# Style
+st.set_page_config(layout='wide', initial_sidebar_state='expanded')
+with open('style.css') as css:
+    st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
-with open('style.css') as f:
-    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+# Title
+st.title("About Us")
 # Row A for for adding 3 description boxes
 st.markdown('### Semantic Search')
 col1, col2, col3 = st.columns(3)
 col1.metric("Books", "1470")
-col2.metric("Source", "Kaggel")
+col2.metric("Source", "Kaggle")
 col3.metric("Accuracy","64%")
 
 option = st.selectbox(

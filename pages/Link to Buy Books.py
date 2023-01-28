@@ -1,11 +1,16 @@
 import streamlit as st
 import pandas as pd
 
-import streamlit_BTS
-st.header("Link to Buy top 10 recommended Books")
+# Style
+st.set_page_config(layout='wide', initial_sidebar_state='expanded')
+with open('style.css') as css:
+    st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
+# Title
+st.title("Link to Buy top 10 recommended Books")
 
 df = st.cache.df_output_link
 table = pd.DataFrame(df).from_dict(df, orient='index')
+
 def make_clickable(val):
     return f'<a target="_blank" href="{val}">{val}</a>'
   # Create interactive table using plotly
