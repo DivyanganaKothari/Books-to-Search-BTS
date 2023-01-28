@@ -30,7 +30,7 @@ fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
 
 # Set the chart title and axis labels
 fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Rating')
-fig.update_traces(marker=dict(color='#9B870C'))
+fig.update_traces(marker=dict(color='#C58059'))
 
 # Display the chart
 st.plotly_chart(fig)

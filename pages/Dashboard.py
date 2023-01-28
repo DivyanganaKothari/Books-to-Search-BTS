@@ -18,7 +18,7 @@ fig3 = px.histogram(df, x='rating', nbins=50)#The number of bins (also known as 
 
 fig3.update_layout( xaxis_title='Average rating',
                    font=dict(size=20))
-fig3.update_traces(marker=dict(color='#9B870C'))
+fig3.update_traces(marker=dict(color='#C58059'))
 st.plotly_chart(fig3)
 
 st.markdown('### Select a chart type in which you want to visualize the data')
@@ -30,12 +30,12 @@ y_axis_val = col2.selectbox('Select the Y-axis', options=df.columns)
 
 if chart_type == 'Scatter':
     plot = px.scatter(df, x=x_axis_val, y=y_axis_val)
-    plot.update_traces(marker=dict(color='#9B870C'))
+    plot.update_traces(marker=dict(color='#C58059'))
     st.plotly_chart(plot, use_container_width=True)
 
 else:
     plot = px.line(df, x=x_axis_val, y=y_axis_val)
-    plot.update_traces(marker=dict(color='#9B870C'))
+    plot.update_traces(marker=dict(color='#C58059'))
     st.plotly_chart(plot, use_container_width=True)
 
 
