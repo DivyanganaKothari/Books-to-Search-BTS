@@ -9,7 +9,7 @@ with open('style.css') as css:
 
 # Title
 #######
-st.title('Here you can get to know more about our dataset')
+st.title('Here you can get wto know more about our dataset')
 df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 #Average rating distribution for all books
 st.markdown('### Average rating distribution for all books')

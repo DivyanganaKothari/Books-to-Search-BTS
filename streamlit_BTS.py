@@ -16,7 +16,14 @@ with open('style.css') as css:
 
 # Title
 st.title("BTS-Book Recommendation System")
-
+title= "This website is a book recommendation system that uses embeddings and semantic search to suggest book titles based on a user's search query. The website utilizes the Sentence Transformer library and the BERT model to create embeddings and calculate similarity scores between books. The output of the website is interactive visualizations that display the top 10 book titles with the highest similarity scores and ratings. Users can also explore trends and compare similarities through various visualizations such as bar charts, line graphs, and pie charts. The website is built using Streamlit, making it easy to use and navigate."
+st.markdown(
+    "<p id='text-img' style='text-align:justify; padding:30px; background-color:#102945 ; color:#cfe5fc; "
+    "font-family: sans serif; border-radius: 30px; font-size: 36px;font-size:1.2em; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);'>"
+    + title +
+    "</p>",
+    unsafe_allow_html=True
+)
 df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
 
@@ -29,7 +36,7 @@ top_10 = df3.head(10)
 fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
 
 # Set the chart title and axis labels
-fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Rating')
+fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Count')
 fig.update_traces(marker=dict(color='#C58059'))
 
 # Display the chart
