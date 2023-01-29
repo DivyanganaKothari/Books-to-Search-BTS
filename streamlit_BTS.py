@@ -15,7 +15,8 @@ with open('style.css') as css:
     st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
 # Title
-st.title("BTS-Book Recommendation System")
+title = "BTS - Book Recommendation System"
+st.markdown("<h1 style='text-align:center; padding:20px;' >" + title + "</h1>", unsafe_allow_html=True)
 title= "This website is a book recommendation system that uses embeddings and semantic search to suggest book titles based on a user's search query. The website utilizes the Sentence Transformer library and the BERT model to create embeddings and calculate similarity scores between books. The output of the website is interactive visualizations that display the top 10 book titles with the highest similarity scores and ratings. Users can also explore trends and compare similarities through various visualizations such as bar charts, line graphs, and pie charts. The website is built using Streamlit, making it easy to use and navigate."
 st.markdown(
     "<p id='text-img' style='text-align:justify; padding:30px; background-color:#102945 ; color:#cfe5fc; "

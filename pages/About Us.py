@@ -1,18 +1,34 @@
 import streamlit as st
 import graphviz
+import pandas as pd
+import plotly.express as px
+
+
 # Style
 st.set_page_config(layout='wide', initial_sidebar_state='expanded')
 with open('style.css') as css:
     st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
 
 # Title
-st.title("About Us")
+st.markdown(' ### Here you can get to know more about our dataset')
+
 # Row A for for adding 3 description boxes
-st.markdown('### Semantic Search')
 col1, col2, col3 = st.columns(3)
 col1.metric("Books", "1470")
 col2.metric("Source", "Kaggle")
 col3.metric("Accuracy","64%")
+
+df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
+
+#Average rating distribution for all books
+st.markdown('### Average rating distribution for all books')
+df.rating = df.rating.astype(float)
+fig3 = px.histogram(df, x='rating', nbins=50)#The number of bins (also known as intervals or classes) determines the granularity of the histogram.
+
+fig3.update_layout( xaxis_title='Average rating',
+                   font=dict(size=20))
+fig3.update_traces(marker=dict(color='#C58059'))
+st.plotly_chart(fig3)
 
 option = st.selectbox(
     'How would you like to be view the flow?',
