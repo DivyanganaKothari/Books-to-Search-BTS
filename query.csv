@@ -1,6 +1,6 @@
 query,count
 python,11.0
-java,6.0
+java,7.0
 programming for beginners,2.0
 machine learning,2.0
 android,1.0
@@ -9,4 +9,4 @@ c++,7.0
 c,2.0
 data science,8.0
 data analysis,7.0
-pandas,9.0
+pandas,10.0

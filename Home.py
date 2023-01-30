@@ -28,20 +28,30 @@ st.markdown(
 df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 df2 = pd.read_pickle('Embeddings.pkl')
 
-df3= pd.read_csv('query.csv')
-# Sort the dataframe by the 'count' column in descending order
-df3= df3.sort_values(by='count', ascending=True)
-# Get the top 10 rows
-top_10 = df3.head(10)
-# Create a line chart
-fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
+#st.markdown("<div class='border' style='display: flex;padding:30px; background-color:#102945 ;box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);border-radius: 30px;'>", unsafe_allow_html=True)
+col1, col2 = st.columns((5,5))
 
-# Set the chart title and axis labels
-fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Count')
-fig.update_traces(marker=dict(color='#C58059'))
+with col1:
+    st.write(" ")
+    st.image("pic_main.jpeg")
+
+
+with col2:
+    df3= pd.read_csv('query.csv')
+     # Sort the dataframe by the 'count' column in descending order
+    df3= df3.sort_values(by='count', ascending=True)
+    # Get the top 10 rows
+    top_10 = df3.head(10)
+     # Create a line chart
+    fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
+
+    # Set the chart title and axis labels
+    fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Count')
+    fig.update_traces(marker=dict(color='#C58059'))
 
 # Display the chart
-st.plotly_chart(fig)
+    st.plotly_chart(fig)
+
 
 
 

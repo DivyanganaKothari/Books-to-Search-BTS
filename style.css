@@ -8,19 +8,7 @@
      border-left: 0.5rem solid #9AD8E1 !important;
      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
 }
-#text-img{
-    background-image: url(books-background_gg60551438-transformed.jpeg);
-    background-size: cover;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 20px;
-    color: black;
-    text-align: center;
 
-}
  label.css-mkogse.e16fv1kl2 {
      color: #36b9cc !important;
      font-weight: 700 !important;
@@ -70,6 +58,7 @@ button[type=submit] {
 button[type=submit]:hover {
   background-color: #45a049;
 }
+
 
  
  
