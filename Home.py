@@ -3,16 +3,18 @@ import streamlit as st
 import warnings
 warnings.filterwarnings("ignore")
 from sentence_transformers.util import semantic_search
-import pandas as pd
+import pandas as pd 
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 import plotly.express as px
 import plotly.graph_objs as go
+from config import GetDataFrameFromSqlQuery, GetSelectBooksQuery, GetSelectEmbeddingsQuery, SetStyle
+import numpy as np
+import plotly.colors
 
 # Style
-st.set_page_config(layout='wide', initial_sidebar_state='expanded')
-with open('style.css') as css:
-    st.markdown(f'<style>{css.read()}</style>', unsafe_allow_html=True)
+SetStyle(st)
+
 
 # Title
 title = "BTS - Book Recommendation System"
@@ -25,8 +27,6 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True
 )
-df= pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
-df2 = pd.read_pickle('Embeddings.pkl')
 
 #st.markdown("<div class='border' style='display: flex;padding:30px; background-color:#102945 ;box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);border-radius: 30px;'>", unsafe_allow_html=True)
 col1, col2 = st.columns((5,5))
@@ -39,24 +39,19 @@ with col1:
 with col2:
     df3= pd.read_csv('query.csv')
      # Sort the dataframe by the 'count' column in descending order
-    df3= df3.sort_values(by='count', ascending=True)
+    df3= df3.sort_values(by='count', ascending=False)
     # Get the top 10 rows
     top_10 = df3.head(10)
-     # Create a line chart
+    top_10 = top_10[::-1]
+    # Create a line chart
     fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
 
     # Set the chart title and axis labels
     fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Count')
-    fig.update_traces(marker=dict(color='#C58059'))
+    fig.update_traces(marker=dict(color='#83c9ff'))
 
 # Display the chart
     st.plotly_chart(fig)
-
-
-
-
-#dataset
-data=pd.read_csv('Data.xlsx - Merged Dataset_1.csv')
 
 def create_table(query):
     filename = "query.csv"
@@ -75,23 +70,32 @@ def create_table(query):
 
 #user enters query
 
-query = st.text_input("Enter your query")
+query = st.text_input("Enter your Query")
+top_k = st.number_input(label='Amount of results', min_value=1, max_value=20, value=10, step=1,help="Set the amount of recommendations you wish to receive.")
 
 if st.button("Search"):  # Get Search Query
+    # Get Data of Books
+    dfBooks = GetDataFrameFromSqlQuery(GetSelectBooksQuery())
+    
     create_table(query.lower())  # save statistics about recent querys
+    
+    # get embeddings from mysql
+    dfEmbTempAll = GetDataFrameFromSqlQuery(GetSelectEmbeddingsQuery())
+    # convert Mixed Dataframe into numpy array
+    dfEmbTempNumpy = dfEmbTempAll.drop(columns=['index']).to_numpy(dtype=np.float32)
+    
     model = SentenceTransformer('bert-base-cased')
-    query_embedding = model.encode(query, convert_to_tensor=True,device='cpu')
-    top_k = 10
-    results = semantic_search(query_embedding, df2['Embeddings_title'].to_list(), top_k=top_k)
+    query_embedding = model.encode(query, convert_to_numpy=True, device='cpu')
+    results = semantic_search(query_embedding, dfEmbTempNumpy, top_k=top_k)
     output={}
     df_output_link={}
     
     for i in results[0]:
         id = i['corpus_id']
         score = i['score']
-        title = df['title'][id]
-        rating= df['rating'][id]
-        link=df['complete_link'][id]
+        title = dfBooks['title'][id]
+        rating= dfBooks['rating'][id]
+        link=dfBooks['complete_link'][id]
         output[id] = {"score": score, "title": title, "rating": rating}
         df_output_link[id]= {"title": title, "link": link}
 
@@ -101,25 +105,18 @@ if st.button("Search"):  # Get Search Query
     st.cache.df_output_link=df_output_link
 
     #vis
-    st.markdown('### Bar Chart showing top 10 Books according to the similarity score')
+    st.markdown('### Bar Chart showing top ' + str(len(df_output_link)) + ' Books according to the similarity score')
     fig = px.bar(df_output, x='title', y='score')
     fig.update_layout(xaxis={'categoryorder': 'total descending'}, yaxis={'title': 'score'},
                       xaxis_tickangle=-45, yaxis_title='title')
-    fig.data[0].marker.color = ['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon',
-                                'rosybrown']
+    fig.data[0].marker.color = ['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon', 'rosybrown','olive','khaki','lavender','lightcyan','lightgray','peru','salmon','wheat','lightcoral','goldenrod']
     st.plotly_chart(fig)
 
 
-    st.markdown('### Pie Chart showing top 10 books according to User Rating')
+    st.markdown('### Pie Chart showing top ' + str(len(df_output_link)) + ' books according to User Rating')
     fig2 = px.pie(df_output, values='rating', names='title',
-                  color_discrete_sequence=['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon',
-                                'rosybrown'])
+                  color_discrete_sequence=['peachpuff', 'palevioletred', 'midnightblue', 'palegoldenrod', 'mistyrose', 'paleturquoise', 'sienna', 'plum', 'lightsalmon', 'rosybrown','olive','khaki','lavender','lightcyan','lightgray','peru','salmon','wheat','lightcoral','goldenrod'])
     st.plotly_chart(fig2)
-
-
-
-
-
 
 
 

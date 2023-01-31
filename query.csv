@@ -2,11 +2,16 @@ query,count
 python,11.0
 java,7.0
 programming for beginners,2.0
-machine learning,2.0
+machine learning,3.0
 android,1.0
 stats,4.0
-c++,7.0
+c++,9.0
 c,2.0
-data science,8.0
-data analysis,7.0
-pandas,10.0
+data science,12.0
+data analysis,8.0
+pandas,11.0
+test,66.0
+select * from books;,1.0
+zedz,1.0
+testt,5.0
+,1.0
