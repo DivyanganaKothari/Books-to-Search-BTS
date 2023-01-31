@@ -22,6 +22,11 @@ def SetStyle(st):
     st.markdown(hide_st_style, unsafe_allow_html=True)
     return
     
+def ValidEmail(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    import re
+    return re.fullmatch(regex, email)
+    
 # function for getting SQL Connection
 def SqlEngine():
     from sqlalchemy import create_engine
@@ -40,4 +45,6 @@ def GetSelectBooksQuery():
     return "Select * from books_processed"
 def GetSelectEmbeddingsQuery():
     return "Select * from books_embeddings"
+def GetSelectQueryStatistic():
+    return "Select * from query_statistic"
     

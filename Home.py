@@ -8,13 +8,12 @@ from sentence_transformers import SentenceTransformer
 from pathlib import Path
 import plotly.express as px
 import plotly.graph_objs as go
-from config import GetDataFrameFromSqlQuery, GetSelectBooksQuery, GetSelectEmbeddingsQuery, SetStyle
+from config import SqlEngine, GetDataFrameFromSqlQuery, GetSelectBooksQuery, GetSelectEmbeddingsQuery, GetSelectQueryStatistic, SetStyle
 import numpy as np
 import plotly.colors
 
 # Style
 SetStyle(st)
-
 
 # Title
 title = "BTS - Book Recommendation System"
@@ -28,6 +27,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+#Create SQL Conection as it is used on multiple points
+engine = SqlEngine()
+    
 #st.markdown("<div class='border' style='display: flex;padding:30px; background-color:#102945 ;box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);border-radius: 30px;'>", unsafe_allow_html=True)
 col1, col2 = st.columns((5,5))
 
@@ -35,13 +37,12 @@ with col1:
     st.write(" ")
     st.image("pic_main.jpeg")
 
-
 with col2:
-    df3= pd.read_csv('query.csv')
+    dfQuery = GetDataFrameFromSqlQuery(GetSelectQueryStatistic(), engine) #MySQL Query Result into a panda DataFrame
      # Sort the dataframe by the 'count' column in descending order
-    df3= df3.sort_values(by='count', ascending=False)
+    dfQuery = dfQuery.sort_values(by='count', ascending=False)
     # Get the top 10 rows
-    top_10 = df3.head(10)
+    top_10 = dfQuery.head(10)
     top_10 = top_10[::-1]
     # Create a line chart
     fig = go.Figure(data=go.Scatter(x=top_10['query'], y=top_10['count']))
@@ -50,42 +51,41 @@ with col2:
     fig.update_layout(title='Top 10 Book Searches in our Website', xaxis_title='Query', yaxis_title='Count')
     fig.update_traces(marker=dict(color='#83c9ff'))
 
-# Display the chart
+    # Display the chart
     st.plotly_chart(fig)
 
-def create_table(query):
-    filename = "query.csv"
-    if Path(filename).is_file():
-        df = pd.read_csv(filename)
-        df['query'] = df['query'].str.lower()
-        if query in df['query'].values:
-            df.loc[df['query'] == query, 'count'] += 1
-        else:
-            df = df.append({'query': query, 'count': 1}, ignore_index=True)
-        df.to_csv(filename, index=False)
+def UpdateQueryStatistics(query, dfQuery, engine):
+    if query in dfQuery['query'].values: # if query is already existing in dataframe
+        dfQuery.loc[dfQuery['query'] == query, 'count'] += 1 # increment count
     else:
-        df = pd.DataFrame({'query': [query], 'count': [1]})
-        df.to_csv(filename, index=False)
-    return df
+        dfQuery.loc[len(dfQuery)] = [query, 1] # add a new antry for query
+        
+    with engine.begin() as con: # save query statistics back in sql
+        inserted = dfQuery.to_sql(con=con, name='query_statistic', if_exists='replace', method='multi', index=False);
+    return
 
 #user enters query
-
 query = st.text_input("Enter your Query")
 top_k = st.number_input(label='Amount of results', min_value=1, max_value=20, value=10, step=1,help="Set the amount of recommendations you wish to receive.")
 
 if st.button("Search"):  # Get Search Query
-    # Get Data of Books
-    dfBooks = GetDataFrameFromSqlQuery(GetSelectBooksQuery())
+    if not query or query == "": 
+        st.stop() # dont proceed if emty request
     
-    create_table(query.lower())  # save statistics about recent querys
+    # Get Data of Books
+    dfBooks = GetDataFrameFromSqlQuery(GetSelectBooksQuery(), engine)
+    
+    UpdateQueryStatistics(query.lower(),dfQuery, engine)  # save statistics about recent querys
     
     # get embeddings from mysql
-    dfEmbTempAll = GetDataFrameFromSqlQuery(GetSelectEmbeddingsQuery())
+    dfEmbTempAll = GetDataFrameFromSqlQuery(GetSelectEmbeddingsQuery(), engine)
     # convert Mixed Dataframe into numpy array
-    dfEmbTempNumpy = dfEmbTempAll.drop(columns=['index']).to_numpy(dtype=np.float32)
+    dfEmbTempNumpy = dfEmbTempAll.drop(columns=['index']).to_numpy(dtype=np.float32)#tensor object
     
-    model = SentenceTransformer('bert-base-cased')
-    query_embedding = model.encode(query, convert_to_numpy=True, device='cpu')
+    if not hasattr(st.cache, 'model'): # cache model initalization for performance
+        st.cache.model = SentenceTransformer('bert-base-cased')
+    
+    query_embedding = st.cache.model.encode(query, convert_to_numpy=True, device='cpu')
     results = semantic_search(query_embedding, dfEmbTempNumpy, top_k=top_k)
     output={}
     df_output_link={}

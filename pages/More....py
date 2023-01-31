@@ -21,16 +21,11 @@ st.write( "Here you can get link to buy the top Recommended books, please enter 
 table = pd.DataFrame(df).from_dict(df, orient='index')
 
 def make_clickable(val):
-    return f'<a target="_blank" href="{val}">{val}</a>'
-  # Create interactive table using plotly
-
-# Convert the 'link' column to clickable links
-
+    return f'<a target="_blank" href="{val}">Link</a>'
+    
 # Display the table with the clickable links
 if len(df):
-    for _, row in table.iterrows():
-        st.markdown(f"[{row['title']}]({row['link']})")
-    table['link'] = table['link'].apply(lambda x: f'<a href="{x}">{x}</a>')
-    st.dataframe(table)
+    table['link'] = table['link'].apply(lambda x : make_clickable(x) if x != 'Link is not avaliable' else 'Not available')
+    st.write(table.to_html(escape=False, index=False), unsafe_allow_html=True)
 
 

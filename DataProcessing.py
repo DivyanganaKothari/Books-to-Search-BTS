@@ -4,6 +4,9 @@ import warnings
 import pandas as pd
 from numpy import ndarray
 from sqlalchemy import text
+#database-sqlalchemy
+#dataframe-pandas
+#string-tensors- sentencetensor- trained model
 from config import SqlEngine, GetDataFrameFromSqlQuery, GetSelectRawBooksQuery
 
 #Create Engine to connect with MySQL
@@ -32,7 +35,7 @@ print('After Cleanup',dfBooks.shape)
 
 # save dataframe into MySQL
 with engine.begin() as con:
-    inserted = dfBooks.to_sql(con=con, name='books_processed', if_exists='replace', index=False, method='multi');
+    inserted = dfBooks.to_sql(con=con, name='books_processed', if_exists='replace', method='multi');
 
 print('Processed ', inserted, 'books')
 
@@ -62,8 +65,8 @@ dfEmb = pd.DataFrame(sentences_embeddings_column)
 dfEmb.insert(0, 'index', 0) # add missing index 
 dfEmb['index'] = dfBooks['index'].tolist() # copy original index to it
 
-# save the model as pickle file 
+# save the model into mysql 
 with engine.begin() as con:
-    inserted = dfEmb.to_sql(con=con, name='books_embeddings', if_exists='replace', index=False, method='multi');
+    inserted = dfEmb.to_sql(con=con, name='books_embeddings', if_exists='replace', method='multi');
 print('-'*50 )
 print('Data processing is done')

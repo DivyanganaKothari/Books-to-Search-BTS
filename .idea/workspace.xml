@@ -2,28 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a8dcd010-37ab-4b30-ac37-f4a4694c107b" name="Changes" comment="commit">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Books-to-Search-BTS-.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.streamlit/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/.streamlit/config.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data.xlsx - Merged Dataset.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data.xlsx - Merged Dataset_1.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data_processing_BTS.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Embeddings.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataProcessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataProcessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DatabaseStruct.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DatabaseStruct.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DatasetRaw.csv" beforeDir="false" afterPath="$PROJECT_DIR$/DatasetRaw.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DatasetRawForSQL.csv" beforeDir="false" afterPath="$PROJECT_DIR$/DatasetRawForSQL.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Home.py" beforeDir="false" afterPath="$PROJECT_DIR$/Home.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/About Us.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/About.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/About.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/About.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/Contact Us.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/Contact Us.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/Dashboard.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/More...py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/query.csv" beforeDir="false" afterPath="$PROJECT_DIR$/query.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/More....py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/More....py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,9 +82,9 @@
       <module name="Books-to-Search-BTS-" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\divya\anaconda3\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -263,7 +251,8 @@
       <workItem from="1675023900241" duration="1070000" />
       <workItem from="1675024982839" duration="7112000" />
       <workItem from="1675085970943" duration="238000" />
-      <workItem from="1675111341502" duration="13792000" />
+      <workItem from="1675111341502" duration="14330000" />
+      <workItem from="1675201534937" duration="6764000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1673908986453</created>
@@ -412,7 +401,21 @@
       <option name="project" value="LOCAL" />
       <updated>1675086114787</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="commit">
+      <created>1675127514238</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1675127514239</updated>
+    </task>
+    <task id="LOCAL-00023" summary="commit">
+      <created>1675127541699</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1675127541699</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
