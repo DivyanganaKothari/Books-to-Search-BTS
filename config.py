@@ -6,7 +6,6 @@ def SetStyle(st):
     hide_st_style = """
                 <style>
                 #MainMenu {visibility: hidden;}
-                footer {visibility: hidden;}
                 footer:after {
     	               content:'Made by Neurons ❤';
                 	    visibility: visible;
