@@ -1,7 +1,5 @@
 import streamlit as st
 import graphviz
-import pandas as pd
-import plotly.express as px
 from config import GetDataFrameFromSqlQuery, GetSelectBooksQuery, GetSelectEmbeddingsQuery, SetStyle
 
 # Style
@@ -12,14 +10,15 @@ st.markdown(' ### Here you can get to know more about our dataset')
 
 # Row A for for adding 3 description boxes
 col1, col2, col3 = st.columns(3)
-col1.metric("Books", "1470")
+col1.metric("Books", "1431")
 col2.metric("Source", "Kaggle")
 col3.metric("Domain","Educational")
 
 option = st.selectbox(
     'How would you like to be view the flow?',
      ('Simple Flow of our Model', 'Detailed Flow of our Model'))
-     
+
+#graph vizualisation
 graph = graphviz.Digraph()
 
 if option == 'Simple Flow of our Model':

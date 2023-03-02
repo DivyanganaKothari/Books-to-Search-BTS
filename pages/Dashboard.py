@@ -10,7 +10,9 @@ SetStyle(st)
 title="Here you can get to know more about our dataset"
 st.markdown("<h1 style='text-align:center; padding:20px;' >" + title + "</h1>", unsafe_allow_html=True)
 dfBooks = GetDataFrameFromSqlQuery(GetSelectBooksQuery())
+
 #Average rating distribution for all books
+
 st.write('### Average rating distribution for all books')
 dfBooks.rating = dfBooks.rating.astype(float)
 fig3 = px.histogram(dfBooks, x='rating', nbins=50)#The number of bins (also known as intervals or classes) determines the granularity of the histogram.
@@ -22,6 +24,8 @@ fig3.update_traces(marker=dict(line=dict(color='black', width=1),
                                 color='#83c9ff'))
 st.plotly_chart(fig3)
 
+
+#scatter graph
 st.write('### Get to know our complete Data Set')
 col1, col2 = st.columns(2)
 

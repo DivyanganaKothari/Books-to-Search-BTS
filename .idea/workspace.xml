@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="a8dcd010-37ab-4b30-ac37-f4a4694c107b" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Home.py" beforeDir="false" afterPath="$PROJECT_DIR$/Home.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/About.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/About.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/Contact Us.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/Contact Us.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/Dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/Dashboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/More....py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/More....py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,27 +48,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/divya/PycharmProjects/Books-to-Search-BTS-",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "advanced.settings"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/divya/PycharmProjects/Books-to-Search-BTS-&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "CSS"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;CSS&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\divya\PycharmProjects\Books-to-Search-BTS-" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\divya\PycharmProjects\Books-to-Search-BTS-" />
+      <recent name="C:\Users\divya\PycharmProjects\Books-to-Search-BTS-\pages" />
     </key>
   </component>
   <component name="RunManager" selected="Python.Home (1)">
@@ -241,7 +247,8 @@
       <workItem from="1675024982839" duration="7112000" />
       <workItem from="1675085970943" duration="238000" />
       <workItem from="1675111341502" duration="14330000" />
-      <workItem from="1675201534937" duration="7398000" />
+      <workItem from="1675201534937" duration="13684000" />
+      <workItem from="1677692213099" duration="16278000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <created>1673908986453</created>
@@ -418,7 +425,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675209479215</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="commit">
+      <created>1675210263343</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1675210263343</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from config import SetStyle
 #style
-# Style
 SetStyle(st)
 
 if not hasattr(st.cache, 'df_output_link'):
